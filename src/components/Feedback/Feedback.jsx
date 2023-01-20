@@ -1,10 +1,12 @@
 import { Component } from 'react';
 
-import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
-import Statistics from './Statistics/Statistics';
-import Section from './Section/Section';
+import FeedbackOptions from './FeedbackOptions';
+import Statistics from './Statistics';
+import Section from './Section';
 
 import styles from './feedback.module.css';
+
+const voteOptions = ["good", "neutral", "bad"];
 
 class Feedback extends Component {
   state = {
@@ -43,7 +45,7 @@ class Feedback extends Component {
     return (
       <div className={styles.wrapper}>
         <Section title = "Please leave feedback">
-          <FeedbackOptions increaseVotes={this.increaseVotes} />
+          <FeedbackOptions options={voteOptions} increaseVotes={this.increaseVotes} />
         </Section>
         <Section title = "Statistics">
           <Statistics

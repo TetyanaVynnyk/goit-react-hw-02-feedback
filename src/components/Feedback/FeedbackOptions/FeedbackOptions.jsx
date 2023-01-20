@@ -1,39 +1,23 @@
+import PropTypes from "prop-types";
+
 import styles from '../feedback.module.css';
 
-const FeedbackOptions = ({ increaseVotes }) => {
+const FeedbackOptions = ({ options, increaseVotes }) => {
+  const elements = options.map(name => <li key={name} >
+    <button className={styles.btn} onClick={() => increaseVotes(name)} type="button">{name}</button>
+</li>)
   return (
     <>
       <ul className={styles.btnWrapper}>
-        <li>
-          <button
-            onClick={() => increaseVotes('good')}
-            className={styles.btn}
-            type="button"
-          >
-            Good
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => increaseVotes('neutral')}
-            className={styles.btn}
-            type="button"
-          >
-            Neutral
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => increaseVotes('bad')}
-            className={styles.btn}
-            type="button"
-          >
-            Bad
-          </button>
-        </li>
+        {elements}
       </ul>
     </>
   );
 };
 
 export default FeedbackOptions;
+
+FeedbackOptions.propTypes = {
+  increaseVotes: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+}
