@@ -3,10 +3,9 @@ import { Component } from 'react';
 import FeedbackOptions from './FeedbackOptions';
 import Statistics from './Statistics';
 import Section from './Section';
+import Notification from './Notification';
 
 import styles from './feedback.module.css';
-
-const voteOptions = ["good", "neutral", "bad"];
 
 class Feedback extends Component {
   state = {
@@ -20,14 +19,14 @@ class Feedback extends Component {
     const total = good + neutral + bad;
     return total;
   }
-
-  countPositiveFeedbackPercentage(propName) {
+  // Функція може бути використана для підрахунку будь-якого виду оцінки
+  countFeedbackPercentage(propName) {
     const total = this.countTotalFeedback();
     if (!total) {
       return 0;
     }
     const value = this.state[propName];
-    const result = ((value / total) * 100).toFixed(2);
+    const result = Math.round((value / total) * 100);
     return Number(result);
   }
 
@@ -40,24 +39,45 @@ class Feedback extends Component {
   render() {
     const { good, neutral, bad } = this.state;
     const total = this.countTotalFeedback();
-    const positiveFeedback = this.countPositiveFeedbackPercentage('good');
+    const positiveFeedback = this.countFeedbackPercentage('good');
 
-    return (
-      <div className={styles.wrapper}>
-        <Section title = "Please leave feedback">
-          <FeedbackOptions options={voteOptions} increaseVotes={this.increaseVotes} />
-        </Section>
-        <Section title = "Statistics">
-          <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
-            total={total}
-            positiveFeedback={positiveFeedback}
-          />
-        </Section>
-      </div>
+    const voteSection = (
+      <Section title="Please leave feedback">
+        <FeedbackOptions
+          options={Object.keys(this.state)}
+          increaseVotes={this.increaseVotes}
+        />
+      </Section>
     );
+    const resultsSection = (
+      <Section title="Statistics">
+        <Statistics
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          total={total}
+          positiveFeedback={positiveFeedback}
+        />
+      </Section>
+    );
+    let totalSection;
+    if (good === 0 && neutral === 0 && bad === 0) {
+      totalSection = (
+        <>
+          {voteSection}
+          <Notification message="There is no feedback" />
+        </>
+      );
+    } else {
+      totalSection = (
+        <>
+          {voteSection}
+          {resultsSection}
+        </>
+      );
+    }
+
+    return <div className={styles.wrapper}>{totalSection}</div>;
   }
 }
 
