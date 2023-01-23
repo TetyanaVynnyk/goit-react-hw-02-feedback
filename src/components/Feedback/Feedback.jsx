@@ -41,43 +41,29 @@ class Feedback extends Component {
     const total = this.countTotalFeedback();
     const positiveFeedback = this.countFeedbackPercentage('good');
 
-    const voteSection = (
-      <Section title="Please leave feedback">
-        <FeedbackOptions
-          options={Object.keys(this.state)}
-          increaseVotes={this.increaseVotes}
-        />
-      </Section>
-    );
-    const resultsSection = (
-      <Section title="Statistics">
-        <Statistics
-          good={good}
-          neutral={neutral}
-          bad={bad}
-          total={total}
-          positiveFeedback={positiveFeedback}
-        />
-      </Section>
-    );
-    let totalSection;
-    if (good === 0 && neutral === 0 && bad === 0) {
-      totalSection = (
-        <>
-          {voteSection}
+    return (
+      <div className={styles.wrapper}>
+        <Section title="Please leave feedback">
+          <FeedbackOptions
+            options={Object.keys(this.state)}
+            increaseVotes={this.increaseVotes}
+          />
+        </Section>
+        {total ? (
+          <Section title="Statistics">
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={total}
+              positiveFeedback={positiveFeedback}
+            />
+          </Section>
+        ) : (
           <Notification message="There is no feedback" />
-        </>
-      );
-    } else {
-      totalSection = (
-        <>
-          {voteSection}
-          {resultsSection}
-        </>
-      );
-    }
-
-    return <div className={styles.wrapper}>{totalSection}</div>;
+        )}
+      </div>
+    );
   }
 }
 
